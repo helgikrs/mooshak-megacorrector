@@ -104,7 +104,7 @@ def submission_files(*args):
                 res.append(os.path.join(root,f))
     return res
 
-def touch(file):
+def touch(fname):
     with file(fname, 'a'):
         os.utime(fname, times)
 
