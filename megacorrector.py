@@ -8,7 +8,7 @@ import sys
 
 import corrector
 
-default_priority = [15, 14, 13, 5, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 1, 0]
+default_priority = [15, 5, 2, 13, 14, 3, 4, 6, 7, 8, 9, 10, 11, 12, 1, 0]
 
 # MOOSHAK CLASSIFICATIONS
 # ---------------------------
