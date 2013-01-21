@@ -96,11 +96,11 @@ def error_name(err):
         return classifications[err]
     return 'Uknown Error'
 
-def submission_files(ext=''):
+def submission_files(*args):
     res = []
     for root, dirs, files in os.walk(submission_directory()):
         for f in files:
-            if f.endswith(ext):
+            if any(f.endswith(ext) for ext in args):
                 res.append(os.path.join(root,f))
     return res
 

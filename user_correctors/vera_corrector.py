@@ -19,7 +19,7 @@ def check_vera(profile):
     res = corrector.Result()
     res.html_header = '<h4>Vera++ Style Checker</h4>'
 
-    args = [ os.path.join(corrector.home(),'bin/vera++/vera++'), '-profile', profile, '-showrules'] + corrector.submission_files('.cpp')
+    args = [ os.path.join(corrector.home(),'bin/vera++/vera++'), '-profile', profile, '-showrules'] + corrector.submission_files('.cpp','.h')
     p = subprocess.Popen(' '.join(args), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     p.wait()
     errs = p.stderr.read()

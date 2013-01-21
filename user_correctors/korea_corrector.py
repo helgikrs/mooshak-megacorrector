@@ -25,7 +25,7 @@ def formatted_output():
         return None    
 
 def invade_korea(rule_file):
-    args =  ' '.join([ os.path.join(corrector.home(),'bin/nsiqcppstyle/nsiqcppstyle'), '-o', output_file, '-f', rule_file, '--output=csv'] + corrector.submission_files('.cpp'))
+    args =  ' '.join([ os.path.join(corrector.home(),'bin/nsiqcppstyle/nsiqcppstyle'), '-o', output_file, '-f', rule_file, '--output=csv'] + corrector.submission_files('.cpp','.h'))
     p = subprocess.Popen(args, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     p.wait()
     
