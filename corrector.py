@@ -105,7 +105,8 @@ def submission_files(ext=''):
     return res
 
 def touch(file):
-    open(file,'w').close()
+    with file(fname, 'a'):
+        os.utime(fname, times)
 
 def output_html(output, color='red'):
     return output_template%(color,output)
