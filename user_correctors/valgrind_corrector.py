@@ -16,7 +16,7 @@ def check_valgrind():
     arr = data.split('\n')
     match = rex.match(arr[-2])
     if match:
-        number_of_errors = int(group(1))
+        number_of_errors = int(match.group(1))
     else:
         number_of_errors = 1
 
