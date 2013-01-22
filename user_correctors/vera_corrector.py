@@ -37,8 +37,6 @@ def check_vera(profile):
         res.classification = corrector.STATIC_ANALYSIS_ERROR
         res.html_body = corrector.output_html('\n'.join(html))
     
-    res.corrector_result = corrector.CORR_OK
-    res.classification = corrector.ACCEPTED
     return res
 
 
