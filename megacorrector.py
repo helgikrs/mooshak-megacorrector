@@ -156,10 +156,11 @@ def run_corrector(options, pipeline):
                 if isinstance(v, corrector.Result):
                     print_result(out[0], v)
                     res.append( (v.corrector_result, v.classification) )
+                    has_error |= bool(v.corrector_result)
                 else:
                     print_format(out[0], v[0])
                     res.append(v)
-                has_error |= bool(res[0])
+                    has_error |= bool(v[0])
             else:
                 print_format(out[0], False)
         except Exception, e:
