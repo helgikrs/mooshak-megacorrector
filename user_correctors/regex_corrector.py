@@ -39,8 +39,7 @@ def main(diff=False, verbatim=True, ci=False, ip=None, **kwargs):
             obtained = obtained.lower()
 
         if expected.strip() == obtained.strip():
-            if not diff:
-                print "Correct answer"
+            print "Correct answer"
             if kwargs['has_error']:
                 res.corrector_result = corrector.CORR_OK
                 res.classification = corrector.ACCEPTED_WITH_ERRORS
