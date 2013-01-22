@@ -6,6 +6,7 @@ import os
 import re
 import sys
 
+import emailer
 import corrector
 
 default_priority = [15, 5, 2, 13, 14, 3, 4, 6, 7, 8, 9, 10, 11, 12, 1, 0]
@@ -138,7 +139,9 @@ def parse_arguments():
 
 def error(p, ex, out):
     print out[0]
-    print "There was an error in corrector %s: %r" % (p, ex)
+    print """<p>There was an error in corrector %s: %r </br>
+System admin has been notified</p>"""%(p, ex)
+    emailer.send_bug_report(ex, p, corrector.submission_directory())
     
 def run_corrector(options, pipeline):
     res = []

@@ -14,7 +14,11 @@ def check_valgrind():
     res.html_header = '<h4>Valgrind Corrector</h4>'
     data = read_valgrind()
     arr = data.split('\n')
-    number_of_errors = int(rex.match(arr[-2]).group(1))
+    match = rex.match(arr[-2])
+    if match:
+        number_of_errors = int(group(1))
+    else:
+        number_of_errors = 1
 
     if number_of_errors:
         print data.replace("\n", "\r\n")
