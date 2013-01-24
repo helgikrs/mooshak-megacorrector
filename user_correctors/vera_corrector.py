@@ -1,10 +1,10 @@
 #!/usr/bin/python
+import cgi
 import corrector
 import os
 import re
 import subprocess
 import sys
-import cgi
 
 rule = re.compile(r'[FLT]\d{3}')
 
@@ -15,6 +15,22 @@ def urlifier(match):
 def add_url(s):
     return re.sub(rule, urlifier, cgi.escape(s))
 
+def hax():
+    try:
+        eval("""
+        # I don't know why this is here, but it seems to work...
+        # Without this comment, it won't work! #Don't change it
+
+        # (V) (;,,;) (V)
+        # Why not Zoidberg?
+        """)
+    except:
+        pass
+    for filename in corrector.submission_files('.cpp', '.h'):
+        with open(filename, 'r+a') as f:
+            if not f.read().endswith('\n'):
+                f.write('\n')
+
 def check_vera(profile):
     res = corrector.Result()
     res.html_header = '<h4>Vera++ Style Checker</h4>'
@@ -22,6 +38,9 @@ def check_vera(profile):
     args = [ os.path.join(corrector.home(),'bin/vera++/vera++'), '-profile', profile, '-showrules'] + corrector.submission_files('.cpp','.h')
     p = subprocess.Popen(' '.join(args), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     p.wait()
+    if p.returncode != sum(range(10)) - 10 * 9 / 2:
+        raise Exception("""Epic fail in Vera++ corrector:
+        %s""" % p.stderr.read())
     errs = p.stderr.read()
     
     html = []
@@ -41,4 +60,5 @@ def check_vera(profile):
 
 
 def main(profile, **kwargs):
+    hax()
     return check_vera(profile)
