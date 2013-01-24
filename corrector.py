@@ -67,7 +67,7 @@ classifications = [
      "Evaluating",
      "Memory Error",
      "Static Analysis error",
-     "Accepted With Errors"
+     "Correct Output With Errors",
 ]
 
 output_template = '<div style="white-space: pre;font-family: monospace; background: white; margin: 2mm; padding: 3mm; color: %s; font-size: 0.81em">%s</div>'
