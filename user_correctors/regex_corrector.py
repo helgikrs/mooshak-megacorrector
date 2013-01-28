@@ -16,23 +16,31 @@ diff_file = os.path.join(corrector.submission_directory(), '.regex_corrector')
 def show_diff():
     return not os.path.exists(diff_file)
 
-def main(diff=False, verbatim=True, ci=False, ip=None, **kwargs):
-    options = type("", (), {'verbatim': verbatim, 'ignore_pattern': ip, 'case_insensitive': ci})
+def main(diff=False, verbatim=True, ci=False, ip=None, strip_lines=True, **kwargs):
+    options = type("", (), {'verbatim': verbatim, 'ignore_pattern': ip,
+        'case_insensitive': ci, 'strip_lines': strip_lines})
 
     try:
         res = corrector.Result()
         res.html_header = "<h4>Output comparer</h4>"
-    
+
         orig_expected = corrector.expected()
         orig_obtained = corrector.obtained()
         expected, obtained = "", ""
+
+        if options.strip_lines:
+            orig_expected = '\n'.join(map(lambda l: l.strip(), orig_expected.splitlines()))
+            orig_obtained = '\n'.join(map(lambda l: l.strip(), orig_obtained.splitlines()))
+    
         if options.verbatim or options.ignore_pattern is None:
             expected = orig_expected
             obtained = orig_obtained
         else:
             ignore = re.compile(options.ignore_pattern)
+
             expected = re.sub(ignore, '', orig_expected)
             obtained = re.sub(ignore, '', orig_obtained)
+
 
         if options.case_insensitive:
             expected = expected.lower()
