@@ -4,7 +4,6 @@ import re
 import os
 import optparse
 import difflib
-import cgi
 
 # verbatim: Compares obtained and expected output verbatim. Overrides the --ignore_pattern option.',
 # ci: Case insensitive comparison (default: false)',
@@ -19,7 +18,7 @@ MAXLINES = 10000
 def show_diff():
     return not os.path.exists(diff_file)
 
-def main(diff=False, verbatim=True, ci=False, ip=None, strip_lines=True, show_inp=True, **kwargs):
+def main(diff=False, verbatim=True, ci=False, ip=None, strip_lines=True, **kwargs):
     options = type("", (), {'verbatim': verbatim, 'ignore_pattern': ip,
         'case_insensitive': ci, 'strip_lines': strip_lines})
 
@@ -34,6 +33,9 @@ def main(diff=False, verbatim=True, ci=False, ip=None, strip_lines=True, show_in
         if options.strip_lines:
             orig_expected = '\n'.join(map(lambda l: l.strip(), orig_expected.splitlines()))
             orig_obtained = '\n'.join(map(lambda l: l.strip(), orig_obtained.splitlines()))
+
+            orig_expected = '\n'.join(filter(lambda n: n.find("Enter") == -1, orig_expected.splitlines()))
+            orig_obtained = '\n'.join(filter(lambda n: n.find("Enter") == -1, orig_obtained.splitlines()))
     
         if options.verbatim or options.ignore_pattern is None:
             expected = orig_expected
@@ -58,23 +60,15 @@ def main(diff=False, verbatim=True, ci=False, ip=None, strip_lines=True, show_in
                 res.corrector_result = corrector.CORR_OK
                 res.classification = corrector.ACCEPTED
         else:
+            if not diff:
+                print "Output was not correct"
             res.corrector_result = corrector.CORR_ERROR
             res.classification = corrector.WRONG_ANSWER
 
-            if (diff or show_inp) and show_diff():
-                res.html_body = ''
-
-                if show_inp:
-                    res.html_body += '<h5>Input</h5>'
-                    with open(corrector.input()) as inp:
-                        res.html_body += '''<div style="white-space: pre;font-family:
-                                monospace; background: white; margin: 2mm; padding:
-                                    3mm; ont-size:
-                                        0.81em">%s</div>'''%cgi.escape(inp.read())
-
-                if diff:
+            if diff:
+                if show_diff():
                     differ = difflib.HtmlDiff(tabsize=4)
-                    res.html_body += '''<div style="background: white; margin: 2mm; padding: 3mm">
+                    res.html_body = '''<div style="background: white; margin: 2mm; padding: 3mm">
                     <p style="font-family: monospace; font-size: 0.81em; color: red">Output was not correct</p>
                     <h4>Difference between obtained and expected output</h4>'''
                     res.html_body += differ.make_table(
@@ -85,8 +79,8 @@ def main(diff=False, verbatim=True, ci=False, ip=None, strip_lines=True, show_in
                     if len(orig_expected.splitlines()) > MAXLINES or len(orig_obtained.splitlines()) > MAXLINES:
                         res.html_body += "<p>Output truncated..</p>"
                     corrector.touch(diff_file)
-            else:
-                print "Output was not correct"
+                else:
+                    print "Output was not correct"
             
         return res
 

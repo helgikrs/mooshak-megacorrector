@@ -36,6 +36,7 @@ def check_vera(profile):
     res.html_header = '<h4>Vera++ Style Checker</h4>'
 
     args = [ os.path.join(corrector.home(),'bin/vera++/vera++'), '-profile', profile, '-showrules'] + corrector.submission_files('.cpp','.h')
+    print args
     p = subprocess.Popen(' '.join(args), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     p.wait()
     if p.returncode != sum(range(10)) - 10 * 9 / 2:

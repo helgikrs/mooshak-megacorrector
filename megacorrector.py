@@ -9,7 +9,7 @@ import sys
 import emailer
 import corrector
 
-default_priority = [15, 5, 2, 13, 14, 3, 4, 6, 7, 8, 9, 10, 11, 12, 1, 0]
+default_priority = [5, 2, 15, 13, 14, 3, 4, 6, 7, 8, 9, 10, 11, 12, 1, 0]
 
 # MOOSHAK CLASSIFICATIONS
 # ---------------------------
@@ -167,7 +167,9 @@ def run_corrector(options, pipeline):
             else:
                 print_format(out[0], False)
         except Exception, e:
-            error(prog, e, out)
+            import traceback
+            tb = traceback.format_exc()
+            error(prog, tb, out)
 
     """
     if options.type == "overwrite":

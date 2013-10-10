@@ -9,10 +9,7 @@ valgrind_file = os.path.join(corrector.submission_directory(), ".valgrind_log")
 def read_valgrind():
     return open(valgrind_file).read()
 
-def check_valgrind():
-    res = corrector.Result()
-    res.html_header = '<h4>Valgrind Corrector</h4>'
-    data = read_valgrind()
+def error_count(data):
     arr = data.split('\n')
     match = rex.match(arr[-2])
     if match:
@@ -20,7 +17,25 @@ def check_valgrind():
     else:
         number_of_errors = 1
 
-    if number_of_errors:
+    return number_of_errors > 0
+
+def sigsegv(data):
+    return data.find("SIGSEGV") >= 0 
+
+checkers = [error_count, sigsegv]
+
+def show_error(data):
+    for i in checkers:
+        if i(data):
+            return True
+    return False
+
+def check_valgrind():
+    res = corrector.Result()
+    res.html_header = '<h4>Valgrind Corrector</h4>'
+    data = read_valgrind()
+
+    if show_error(data):
         print data.replace("\n", "\r\n")
         res.html_before = '<p style="margin: 2mm">More information about the error messages produced by Valgrind can be found <a href="http://valgrind.org/docs/manual/mc-manual.html#mc-manual.errormsgs" target="_blank">here</a>.</p>'
         res.corrector_result = corrector.CORR_ERROR
